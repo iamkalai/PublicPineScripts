@@ -1,0 +1,74 @@
+// This source code is subject to the terms of the Mozilla Public License 2.0 at https://mozilla.org/MPL/2.0/
+// © iamkalai
+
+//@version=5
+indicator("Sivakumar Lines", overlay=true)
+
+plot(0.9, color=color.green)
+plot(1.10, color=color.red)
+
+plot(1.80, color=color.green)
+plot(2.20, color=color.red)
+
+plot(2.70, color=color.green)
+plot(3.30, color=color.red)
+
+plot(4.50, color=color.green)
+plot(5.50, color=color.red)
+
+plot(7.20, color=color.green)
+plot(8.80, color=color.red)
+
+plot(11.7, color=color.green)
+plot(14.3, color=color.red)
+
+plot(18.9, color=color.green)
+plot(23.1, color=color.red)
+
+plot(30.6, color=color.green)
+plot(37.4, color=color.red)
+
+plot(49.5, color=color.green)
+plot(60.5, color=color.red)
+
+plot(80.1, color=color.green)
+plot(97.9, color=color.red)
+
+plot(129.6, color=color.green)
+plot(158.4, color=color.red)
+
+plot(209.7, color=color.green)
+plot(256.3, color=color.red)
+
+plot(339.3, color=color.green)
+plot(414.7, color=color.red)
+
+plot(549, color=color.green)
+plot(671, color=color.red)
+
+plot(888.3, color=color.green)
+plot(1085.7, color=color.red)
+
+plot(1437.3, color=color.green)
+plot(1756.7, color=color.red)
+
+plot(2325.6, color=color.green)
+plot(2842.4, color=color.red)
+
+plot(3762.9, color=color.green)
+plot(4599.1, color=color.red)
+
+plot(6088.5, color=color.green)
+plot(7441.5, color=color.red)
+
+plot(9851.4, color=color.green)
+plot(12040.6, color=color.red)
+
+plot(15939.9, color=color.green)
+plot(19482.1, color=color.red)
+
+plot(25791.3, color=color.green)
+plot(31552.7, color=color.red)
+
+plot(41731.2, color=color.green)
+plot(51004.8, color=color.red)
