@@ -6,82 +6,106 @@
 indicator("Sivakumar Lines V2", overlay=true)
 
 getPlots(value) =>
-    s = 0.0
-    r = 0.0
-
+    s = 0.9
+    r = 1.10
+    pr = 0.0
     if value > 0.9 and value < 1.10
+        pr := 0
         s := 0.9
         r := 1.10
-    else if value > 1.80 and value < 2.20
+    else if value > 1.10 and value < 2.20
+        pr := 1.10
         s := 1.80
         r := 2.20
-    else if value > 2.70 and value < 3.30
+    else if value > 2.20 and value < 3.30
+        pr := 2.20
         s := 2.70
         r := 3.30
-    else if value > 4.50 and value < 5.50
+    else if value > 3.30 and value < 5.50
+        pr := 3.30
         s := 4.50
         r := 5.50
-    else if value > 7.20 and value < 8.80
+    else if value > 5.50 and value < 8.80
+        pr := 5.50
         s := 7.20
         r := 8.80
-    else if value > 11.7 and value < 14.3
+    else if value > 8.80 and value < 14.3
+        pr := 8.80
         s := 11.7
         r := 14.3
-    else if value > 18.9 and value < 23.1
+    else if value > 14.3 and value < 23.1
+        pr := 14.3
         s := 18.9
         r := 23.1
-    else if value > 30.6 and value < 37.4
+    else if value > 23.1 and value < 37.4
+        pr := 23.1
         s := 30.6
         r := 37.4
-    else if value > 49.5 and value < 60.5
+    else if value > 37.4 and value < 60.5
+        pr := 37.4
         s := 49.5
         r := 60.5
-    else if value > 80.1 and value < 97.9
+    else if value > 60.5 and value < 97.9
+        pr := 60.5
         s := 80.1
         r := 97.9
-    else if value > 129.6 and value < 158.4
+    else if value > 97.9 and value < 158.4
+        pr := 97.9
         s := 129.6
         r := 158.4
-    else if value > 209.7 and value < 256.3
+    else if value > 158.4 and value < 256.3
+        pr := 158.4
         s := 209.7
         r := 256.3
-    else if value > 339.3 and value < 414.7
+    else if value > 256.3 and value < 414.7
+        pr := 256.3
         s := 339.3
         r := 414.7
-    else if value > 549 and value < 671
+    else if value > 414.7 and value < 671
+        pr := 414.7
         s := 549
         r := 671
-    else if value > 888.3 and value < 1085.7
+    else if value > 671 and value < 1085.7
+        pr := 671
         s := 888.3
         r := 1085.7
-    else if value > 1437.3 and value < 1756.7
+    else if value > 1085.7 and value < 1756.7
+        pr := 1085.7
         s := 1437.3
         r := 1756.7
-    else if value > 2325.6 and value < 2842.4
+    else if value > 1756.7 and value < 2842.4
+        pr := 1756.7
         s := 2325.6
         r := 2842.4
-    else if value > 3762.9 and value < 4599.1
+    else if value > 2842.4 and value < 4599.1
+        pr := 2842.4
         s := 3762.9
         r := 4599.1
-    else if value > 6088.5 and value < 7441.5
+    else if value > 4599.1 and value < 7441.5
+        pr := 4599.1
         s := 6088.5
         r := 7441.5
-    else if value > 9851.4 and value < 12040.6
+    else if value > 7441.5 and value < 12040.6
+        pr := 7441.5
         s := 9851.4
         r := 12040.6
-    else if value > 15939.9 and value < 19482.1
+    else if value > 12040.6 and value < 19482.1
+        pr := 12040.6
         s := 15939.9
         r := 19482.1
-    else if value > 25791.3 and value < 31552.7
+    else if value > 19482.1 and value < 31552.7
+        pr := 19482.1
         s := 25791.3
         r := 31552.7
-    else if value > 41731.2 and value < 51004.8
+    else if value > 31552.7 and value < 51004.8
+        pr := 31552.7
         s := 41731.2
         r := 51004.8
 
-    [s, r]
+    [pr, s, r]
     
-[s, r] = getPlots(close)
+[pr, s, r] = getPlots(close)
 
+plot(pr, color=color.red, title="PR", style=plot.style_circles, linewidth=2)
 plot(s, color=color.green, title="S", style=plot.style_circles, linewidth=2)
 plot(r, color=color.red, title="R", style=plot.style_circles, linewidth=2)
