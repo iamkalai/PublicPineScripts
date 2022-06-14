@@ -11,10 +11,10 @@ var float h = close
 var float l = close
 if new_period(sm)
     h:= close
-l:= close
+    l:= close
 if sm
     h:= math.max(h, high)
-l:= math.min(l, low)
+    l:= math.min(l, low)
 
 bg_color = sm ? color.new(color.gray, 80) : na
 bgcolor(bg_color)
