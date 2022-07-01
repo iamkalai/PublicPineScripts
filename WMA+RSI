@@ -1,0 +1,27 @@
+// This source code is subject to the terms of the Mozilla Public License 2.0 at https://mozilla.org/MPL/2.0/
+// © iamkalai
+
+//@version=5
+indicator("WMA+RSI",shorttitle="WRSI",overlay=true)
+ema1 = input.int(8)
+ema2 = input.int(13)
+rsi = input.int(13)
+
+processEMA(value) =>
+
+    emaValue1 = ta.wma(value, ema1)
+    emaValue2 = ta.wma(value, ema2)
+    
+    rsiValue = ta.rsi(value, rsi)
+
+    buy = ta.crossover(emaValue1, emaValue2) and rsiValue >= 50
+    sell = ta.crossunder(emaValue1, emaValue2)
+    emaColor = emaValue1 > emaValue2 ? color.green : color.red
+    [emaValue1, emaValue2, emaColor, buy, sell]
+
+[emaValue1, emaValue2, emaColor, buy, sell] = processEMA(close)
+
+plot(emaValue1,title="EMA1",color=emaColor, linewidth=2)
+plot(emaValue2,title="EMA2",color=color.white, linewidth=1)
+plotshape(buy, location =  location.belowbar, style = shape.triangleup, color = color.green, size = size.tiny)
+plotshape(sell, location =  location.belowbar, style = shape.triangleup, color = color.red, size = size.tiny)
