@@ -5,7 +5,7 @@
 indicator("WMA+RSI",shorttitle="WRSI",overlay=true)
 ema1 = input.int(8)
 ema2 = input.int(13)
-rsi = input.int(13)
+rsi = input.int(14)
 
 processEMA(value) =>
 
