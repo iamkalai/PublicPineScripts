@@ -1,0 +1,100 @@
+// This source code is subject to the terms of the Mozilla Public License 2.0 at https://mozilla.org/MPL/2.0/
+// © iamkalai
+// Source - https://www.youtube.com/watch?v=CVIslWq2FMU
+
+//@version=4
+study("Pivot Points",overlay=true)
+
+//1//inputs
+s_2d = input(title="Show 2day range ?", type=input.bool, defval=false)
+s_1d = input(title="Show 1can range ?", type=input.bool, defval=false)
+showdc = input(title="Show daily cpr ?", type=input.bool, defval=false)
+showd = input(title="Show daily pivots ?", type=input.bool, defval=false)
+showw = input(title="Show weekly pivot ?", type=input.bool, defval=true)
+showm = input(title="Show monthly pivot ?", type=input.bool, defval=true)
+
+showwr2 = input(title="weekly R2", type=input.bool, defval=false)
+showwr1 = input(title="weekly R1", type=input.bool, defval=false)
+showwp = input(title="weekly Pvt", type=input.bool, defval=true)
+showws1 = input(title="weekly s1", type=input.bool, defval=false)
+showws2 = input(title="weekly s2", type=input.bool, defval=false)
+showmr2 = input(title="monthly R2", type=input.bool, defval=false)
+showmr1 = input(title="monthly R1", type=input.bool, defval=false)
+showmp = input(title="monthly Pvt", type=input.bool, defval=true)
+showms1 = input(title="monthly s1", type=input.bool, defval=false)
+showms2 = input(title="monthly s2", type=input.bool, defval=false)
+
+// daily pivots
+D_High = security(syminfo.tickerid, 'D', high[1], lookahead=barmerge.lookahead_on)
+D_Low = security(syminfo.tickerid, 'D', low[1], lookahead=barmerge.lookahead_on)
+D_Close = security(syminfo.tickerid, 'D', close[1], lookahead=barmerge.lookahead_on)
+D_High1 = security(syminfo.tickerid, 'D', high[2], lookahead=barmerge.lookahead_on)
+D_Low1 = security(syminfo.tickerid, 'D', low[2], lookahead=barmerge.lookahead_on)
+
+d_pvt=(D_High+D_Low+D_Close)/3
+d_R1=d_pvt*2-D_Low
+d_S1=d_pvt*2-D_High
+d_R2 = d_pvt + (D_High - D_Low)
+d_S2 = d_pvt - (D_High - D_Low)
+BC=(D_High+D_Low)/2
+TC=2*d_pvt-BC
+
+
+
+plot(showdc ? d_pvt : na, title="daily pivot", style=plot.style_circles, color=color.blue, linewidth=1)
+plot(showd ? d_R1 : na, title="daily R1", style=plot.style_circles, color=#4CAF50, linewidth=1)
+plot(showd ? d_S1 : na, title="daily S1", style=plot.style_circles, color=#FF5252, linewidth=1)
+bcp= plot(showdc ? BC : na, title="BC", style=plot.style_line, color=color.blue, linewidth=1)
+tcp = plot(showdc ? TC : na, title="TC", style=plot.style_line, color=color.blue, linewidth=1)
+plot(showd ? d_R2 : na, title="daily R2", style=plot.style_circles, color=color.green, linewidth=1)
+plot(showd ? d_S2 : na, title="daily S2", style=plot.style_circles, color=color.red, linewidth=1)
+
+fill(bcp, tcp,color=color.yellow, transp=40, title="Overbought area")
+
+// 2 day range + current level link
+high_2d = max(D_High,D_High1)
+low_2d = min(D_Low,D_Low1)
+plot(s_2d ? high_2d : na, title="2Dhigh", style=plot.style_circles, color=color.blue, linewidth=2)
+plot(s_2d ? low_2d : na, title="2Dlow", style=plot.style_circles, color=color.red, linewidth=2)
+range_2d=high_2d-low_2d
+
+plot(s_1d ? D_High : na, title="1Dhigh", style=plot.style_cross, color=color.purple, linewidth=1)
+plot(s_1d ? D_Low : na, title="1Dlow", style=plot.style_cross, color=color.purple, linewidth=1)
+
+// monthly pivots
+M_High = security(syminfo.tickerid, 'M', high[1], lookahead=barmerge.lookahead_on)
+M_Low = security(syminfo.tickerid, 'M', low[1], lookahead=barmerge.lookahead_on)
+M_Close = security(syminfo.tickerid, 'M', close[1], lookahead=barmerge.lookahead_on)
+
+m_pvt=(M_High+M_Low+M_Close)/3
+m_R1=m_pvt*2-M_Low
+m_S1=m_pvt*2-M_High
+m_R2 = m_pvt + (M_High - M_Low)
+m_S2 = m_pvt - (M_High - M_Low)
+
+mp = plot((showm and showmp) ? m_pvt : na, title="monthly pivot", style=plot.style_circles, color=#9C27B0, linewidth=2)
+plot((showm and showmr1) ? m_R1 : na, title="monthly R1", style=plot.style_circles, color=#4CAF50, linewidth=2)
+ms =plot((showm and showms1) ? m_S1 : na, title="monthly S1", style=plot.style_circles, color=#FF5252, linewidth=2)
+plot((showm and showms1) ? m_R2 : na, title="monthly R2", style=plot.style_circles, color=color.yellow, linewidth=2)
+plot((showm and showms1) ? m_S2 : na, title="monthly S2", style=plot.style_circles, color=color.yellow, linewidth=2)
+
+//weekly pivots
+W_High = security(syminfo.tickerid, 'W', high[1], lookahead=barmerge.lookahead_on)
+W_Low = security(syminfo.tickerid, 'W', low[1], lookahead=barmerge.lookahead_on)
+W_Close = security(syminfo.tickerid, 'W', close[1], lookahead=barmerge.lookahead_on)
+
+w_pvt=((W_High+W_Low+W_Close)/3)[barstate.isrealtime ? 1 : 0]
+w_R1=(w_pvt*2-W_Low)[barstate.isrealtime ? 1 : 0]
+w_S1=(w_pvt*2-W_High)[barstate.isrealtime ? 1 : 0]
+w_R2 = w_pvt + (W_High - W_Low)
+w_S2 = w_pvt - (W_High - W_Low)
+WBC=(W_High+W_Low)/2
+WTC=2*w_pvt-WBC
+
+plot((showw and showwp) ? w_pvt[barstate.isrealtime ? 1 : 0] : na, title="weekly pivot", style=plot.style_cross, color=#9C27B0, linewidth=1)
+plot((showw and showwr1) ? w_R1[barstate.isrealtime ? 1 : 0] : na, title="weekly R1", style=plot.style_cross, color=#4CAF50, linewidth=1)
+plot((showw and showws1) ? w_S1[barstate.isrealtime ? 1 : 0] : na, title="weekly S1", style=plot.style_cross, color=#FF5252, linewidth=1)
+plot((showw and showws1) ? w_R2[barstate.isrealtime ? 1 : 0] : na, title="weekly R2", style=plot.style_cross, color=color.yellow, linewidth=1)
+plot((showw and showws1) ? w_S2[barstate.isrealtime ? 1 : 0] : na, title="weekly S2", style=plot.style_cross, color=color.yellow, linewidth=1)
+plot((showw and showws1) ? W_High[barstate.isrealtime ? 1 : 0] : na, title="weekly S2", style=plot.style_cross, color=color.yellow, linewidth=1)
+plot((showw and showws1) ? W_Low[barstate.isrealtime ? 1 : 0] : na, title="weekly S2", style=plot.style_cross, color=color.yellow, linewidth=1)
