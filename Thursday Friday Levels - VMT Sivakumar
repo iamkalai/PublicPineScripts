@@ -1,22 +1,57 @@
 // This source code is subject to the terms of the Mozilla Public License 2.0 at https://mozilla.org/MPL/2.0/
-// © ManigandanS
+// @ManigandanS, @iamkalai
 
 //@version=5
 indicator("Thursday Friday Levels - VMT Sivakumar", overlay = true)
+
+var table dataTable = table.new(position.bottom_left, 1, 1, border_width = 2)
+
 new_period(p) => p and na(p[1])
-sm = time(timeframe.period, "0000-0000:56")
-//isThursday() => dayofweek(time('D')) == dayofweek.thursday ? 1 : 0
 
-var float h = close
-var float l = close
-if new_period(sm)
-    h:= close
-    l:= close
-if sm
-    h:= math.max(h, high)
-    l:= math.min(l, low)
+tfLevels() =>
 
-bg_color = sm ? color.new(color.gray, 80) : na
+    tf = time(timeframe.period, "0000-0000:56")
+    t = time(timeframe.period, "0000-0000:5")
+
+    var float h = close
+    var float l = close
+    var float h1 = close
+    var float l1 = close
+    //get thursday-friday high-low
+    if new_period(tf)
+        h:= close
+        l:= close
+    if tf
+        h:= math.max(h, high)
+        l:= math.min(l, low)
+
+    //get thursday high-low
+    if new_period(t)
+        h1:= close
+        l1:= close
+    if t
+        h1:= math.max(h1, high)
+        l1:= math.min(l1, low)
+
+    highPercent = ((close * 100) / h) - 100
+    lowPercent = ((close * 100) / l) - 100
+    finalFlag = close > h1
+    finalLevel = finalFlag ? l : h
+    finalLevelText = finalFlag ? "Sell PE " : "Sell CE "
+    finalColor = finalFlag ? color.green : color.red
+    nearestLevel = math.floor(finalLevel / 100) * 100
+
+    tableLabel = "High-Low-" + " (" + str.tostring(math.round(highPercent, 2)) + "," + str.tostring(math.round(lowPercent, 2)) + ")"
+    tableLabel:= tableLabel + "\n" + finalLevelText + str.tostring(nearestLevel)
+    finalLabel = tf ? tableLabel : "NA"
+
+    bg_color = tf ? color.new(color.gray, 80) : na
+
+    [h, l, finalLabel, finalColor, bg_color]
+
+[h, l, finalLabel, finalColor, bg_color] = tfLevels()
+
+table.cell(dataTable, 0, 0, finalLabel, bgcolor = finalColor, text_color = color.white)
 bgcolor(bg_color)
 plot(h, color = color.green)
 plot(l, color = color.red)

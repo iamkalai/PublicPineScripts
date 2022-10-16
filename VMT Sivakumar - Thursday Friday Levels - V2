@@ -1,0 +1,59 @@
+// This source code is subject to the terms of the Mozilla Public License 2.0 at https://mozilla.org/MPL/2.0/
+// @iamkalai
+
+//@version=5
+indicator("VMT Sivakumar - Thursday Friday Levels - V2", overlay=true)
+
+var table dataTable = table.new(position.bottom_left, 1, 1, border_width = 2)
+
+new_period(p) => p and na(p[1])
+
+tfLevels() =>
+    [highV,lowV,closeV] = request.security(syminfo.tickerid, 'D', [high[1],low[1],close[1]],lookahead=barmerge.lookahead_on)
+    t = time(timeframe.period, "0000-0000:5")
+    f = time(timeframe.period, "0000-0000:6")
+    days = time(timeframe.period, "0000-0000:12346")
+
+    var float h = close
+    var float l = close
+    var float level = 0.0
+    var color levelColor = color.blue
+    var string levelText = ''
+
+    //get thursday high-low
+    if new_period(f)
+        h := highV
+        l := lowV
+    if f
+        h := highV
+        l := lowV
+
+    fh = days ? h : na
+    fl = days ? l : na
+
+    highPercent = ((close*100)/h)-100
+    lowPercent = ((close*100)/l)-100
+
+    if close > h
+        levelColor := color.green
+        levelText := "Sell PE" + str.tostring(math.floor(l/100)*100)
+    else if close < l
+        levelColor := color.red
+        levelText := "Sell CE" + str.tostring(math.floor(h/100)*100)
+    else
+        levelColor := color.blue
+        levelText := "No Trade"   
+
+    tableLabel = "High-Low-"+" (" + str.tostring(math.round(highPercent,2)) + "," + str.tostring(math.round(lowPercent,2)) +")"
+    finalLabel = f ? (tableLabel  + "\n" + levelText) : tableLabel
+
+    bg_color = t ? color.new(color.gray,80) : na
+
+    [fh, fl, finalLabel, levelColor, bg_color]
+    
+[h, l, finalLabel, finalColor, bg_color] = tfLevels()
+
+table.cell(dataTable, 0, 0, finalLabel, bgcolor = finalColor, text_color = color.white)
+bgcolor(bg_color)
+plot(h, style = plot.style_linebr, color=color.green)
+plot(l, style = plot.style_linebr, color=color.red)
